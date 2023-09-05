@@ -1,5 +1,5 @@
 import { Application, json, urlencoded, Request, Response, NextFunction} from 'express';
-import http from 'http';
+import http from 'node:http';
 import cors from 'cors'; // cross-origin resource sharing for handle http request headers
 import helmet from 'helmet';
 import hpp from 'hpp';
@@ -11,19 +11,15 @@ import { createClient } from 'redis';
 import { createAdapter } from 'socket.io-redis-adapter';
 import 'express-async-errors';
 import Logger from 'bunyan';
-
 import {config} from './config'; // configuration class for environments variables
-
 import ApplicationRoutes from './routes'; // routes application from default export module
-
-import {NotFoundError , IErrorResponse , CustomError} from './shared/globals/helpers/error.handler';
+import { CustomError, IErrorResponse } from '@global/helpers/error.handler';
 
 //? configuration and set up server class
 
-const SERVER_PORT = 5000;
-const log: Logger = config.createLogger('server');
+// const SERVER_PORT = 5000; // default port
 
-const NotFound = new NotFoundError('Not Found');
+const log: Logger = config.createLogger('server');
 
 export class ApplicationServer {
     // Properties or Fields
@@ -54,8 +50,8 @@ export class ApplicationServer {
             })
         );
 
-        app.use(hpp);
-        app.use(helmet);
+        app.use(hpp());
+        app.use(helmet());
 
         app.use(
             cors({
@@ -75,6 +71,7 @@ export class ApplicationServer {
 
     private routesMiddleware(app : Application) : void {
         ApplicationRoutes(app);
+
     }
 
     private globalErrorHandler(app : Application) : void {
@@ -91,6 +88,7 @@ export class ApplicationServer {
             if(error instanceof CustomError) {
                 return res.status(error.statusCode).json(error.serializeErrors());
             }
+
             next();
         });
 
@@ -98,28 +96,22 @@ export class ApplicationServer {
 
     private async startServer(app : Application) : Promise<void> {
         try {
+            // create http server instance from app (input => app : Express as Application from express)
             const httpServer : http.Server = new http.Server(app);
 
+            // create socket io as http-server instance from app and return in SocketIO
             const socketIO : Server = await this.createSocketIO(httpServer);
 
+            // start http server
             this.startHttpServer(httpServer);
+
+            // start socketIO connection
             this.socketIOConnection(socketIO);
 
         } catch (error) {
-            // console.log(error);
+           // check error connections
             log.error(error);
         }
-    }
-
-    // inside startServer method
-    private startHttpServer(httpServer : http.Server) : void {
-        console.log('====================================');
-        log.info(`Server has started with process ${process.pid}`);
-        console.log('====================================');
-
-        httpServer.listen(config.PORT , () => {
-            log.info(`Server running on port ${config.PORT}`);
-        });
     }
 
     private async createSocketIO(httpServer: http.Server) : Promise <Server>{
@@ -138,11 +130,19 @@ export class ApplicationServer {
         await Promise.all([pubClient.connect() , subClient.connect()]);
         io.adapter(createAdapter(pubClient,subClient));
         return io;
-
     }
 
-    private socketIOConnection(io: Server): void {
+    // inside startServer method
+    private startHttpServer(httpServer : http.Server) : void {
+      log.info(`Server has started with process ${process.pid}`);
 
+      httpServer.listen(config.PORT , () => {
+          log.info(`Server running on port ${config.PORT}`);
+      });
+  }
+
+    private socketIOConnection(io: Server): void {
+      log.info('SocketIO connection');
     }
 }
 
