@@ -1,0 +1,107 @@
+redis: in-memory database
+brew --version
+brew install redis
+
+## Starting and stopping Redis in the foreground
+redis-server
+
+## Starting and stopping Redis using launchd
+brew services start redis
+brew services info redis
+
+## to stop the service
+brew services stop redis
+
+## run redis-cli
+redis-cli
+
+## redis Data Types:
+Strings
+Lists
+Sets
+Hashes
+Sorted Sets
+
+## List
+
+LPUSH : // from left
+- prepends one or multiple values to a list.
+
+LRANGE:
+- gets a range of elements from a list.
+
+LINDEX:
+- gets an element from a list by its index.
+
+LLEN:
+- gets the length of the list.
+
+LREM:
+- remove elements from a list.
+
+LSET:
+- sets the value of an element in a list by its index.
+
+RPUSH: // from right
+- appends one or multiple values to a list.
+
+
+## Sorted Sets
+
+ZADD :
+- adds one or more members to a sorted list.
+
+ZCARD:
+- gets the number of members in a stored set.
+
+ZCOUNT:
+- return the number of elements in the sorted set with a score between min and max.
+
+ZRANGE:
+- returns a range of members in a stored set.
+
+ZREM:
+- removes one or more members from a stored set
+
+
+## Hashes
+
+HSET:
+- sets the string value of a hash field. // save user data object in a hash and save in redis.
+
+HGET: // return string and return a one value
+- gets the value of a hash filed stored at the specified key.
+
+HGETALL:
+- gets all the fields and value stored in a hash at the specified key.
+
+HINCRBY:
+increments the number stored at filed in the hash stored at key by increments.
+positive number => increment.
+negatic number => decrement.
+
+HMGET: // return list and return a multiple values and stored in a list.
+return the values associated with the specified fields in the hash stored at key.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

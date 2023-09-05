@@ -37,9 +37,18 @@ export abstract class CustomError extends Error {
 export class BadRequestError extends CustomError {
 
     statusCode = HTTP_STATUS.BAD_REQUEST;
-    status = 'Bad Request | error';
+    status = 'error';
 
     constructor(message: string) {
+        super(message);
+    }
+}
+
+export class joiRequestValidationError extends CustomError {
+    statusCode = HTTP_STATUS.BAD_REQUEST;
+    status = 'error';
+
+    constructor(message : string) {
         super(message);
     }
 }
@@ -48,7 +57,7 @@ export class BadRequestError extends CustomError {
 export class NotFoundError extends CustomError {
 
     statusCode = HTTP_STATUS.NOT_FOUND;
-    status = 'Not Found | error';
+    status = 'error';
 
     constructor(message: string) {
         super(message);
@@ -56,10 +65,10 @@ export class NotFoundError extends CustomError {
 }
 
 
-export class ForbiddenError extends CustomError { 
+export class ForbiddenError extends CustomError {
 
     statusCode = HTTP_STATUS.FORBIDDEN;
-    status = 'Forbidden | error';
+    status = 'error';
 
     constructor(message : string) {
         super(message);
@@ -67,10 +76,10 @@ export class ForbiddenError extends CustomError {
 }
 
 
-export class NotAuthorizedError extends CustomError { 
+export class NotAuthorizedError extends CustomError {
 
     statusCode = HTTP_STATUS.UNAUTHORIZED;
-    status = 'Not Authorized | error';
+    status = 'error';
 
     constructor(message: string) {
         super(message);
@@ -79,7 +88,7 @@ export class NotAuthorizedError extends CustomError {
 
 export class FileTooLargeError extends CustomError {
     statusCode = HTTP_STATUS.REQUEST_HEADER_FIELDS_TOO_LARGE;
-    status = 'File Too Large | error';
+    status = 'error';
 
     constructor(message : string) {
         super(message);
@@ -89,13 +98,26 @@ export class FileTooLargeError extends CustomError {
 
 export class ServerError extends CustomError {
 
-    statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
-    status = 'Server Error | error';
+    statusCode = HTTP_STATUS.SERVICE_UNAVAILABLE;
+    status = 'error';
 
     constructor(message: string) {
         super(message);
     }
 }
+
+// const er = new RequestValidationError('error');
+// er.statusCode;
+// er.status;
+// er.message;
+
+// let x : IError = er.serializeErrors();
+
+
+
+
+
+
 
 
 
