@@ -1,5 +1,5 @@
-import  HTTP_STATUS from 'http-status-codes';
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import  HTTP_STATUS from 'http-status-codes';
 import { ObjectId } from 'mongodb';
 import { Request , Response } from 'express';
 import { IAuthDocument, ISignupData } from '@auth/interfaces/auth.interface';

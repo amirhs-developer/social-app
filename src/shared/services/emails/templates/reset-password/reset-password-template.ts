@@ -1,0 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import fs from 'fs';
+import ejs from 'ejs';
+import { IResetPasswordParams } from '@user/interfaces/user.interface';
+
+
+class ResetPasswordTemplate {
+
+  public passwordResetConfirmationTemplate(templateParams: IResetPasswordParams): string {
+
+    const {email , username , ipaddress , date } = templateParams;
+
+    return ejs.render(fs.readFileSync(__dirname + '/reset-password-template.ejs', 'utf8'), {
+      username,
+      email,
+      ipaddress,
+      date,
+      image_url: 'https://pluspng.com/img-png/png-lock-picture-lock-2-icon-1600.png'
+    });
+  }
+}
+
+export const resetPasswordTemplate: ResetPasswordTemplate = new ResetPasswordTemplate();
